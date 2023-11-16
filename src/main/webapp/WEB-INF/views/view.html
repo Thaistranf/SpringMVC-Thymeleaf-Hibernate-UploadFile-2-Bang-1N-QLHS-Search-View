@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a th:href="@{/students}">Back to student list</a>
+<div>
+    <div>
+        <label>ID: </label>
+        <label th:text="${studentView.id}"></label>
+    </div>
+    <div>
+        <label>Name: </label>
+        <label th:text="${studentView.name}"></label>
+    </div>
+    <div>
+        <label>Address: </label>
+        <label th:text="${studentView.address}"></label>
+    </div>
+    <div>
+        <label>Image: </label>
+        <label th:text="${studentView.image}"></label>
+    </div>
+</div>
+</body>
+</html>
