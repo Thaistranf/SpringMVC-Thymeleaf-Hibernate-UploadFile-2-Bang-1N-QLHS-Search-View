@@ -8,7 +8,26 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="static/css/style.css">
-
+    <style>
+        th, td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .a {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+        img {
+            max-width: 200px;  /* Ảnh không vượt quá chiều rộng của ô */
+            max-height: 200px; /* Ảnh không vượt quá chiều cao của ô */
+            width: auto;      /* Tự động điều chỉnh chiều rộng */
+            height: auto;     /* Tự động điều chỉnh chiều cao */
+            display: block;   /* Loại bỏ khoảng trắng dư thừa dưới ảnh */
+        }
+    </style>
 </head>
 <body>
 <h1>Student Management</h1>
@@ -41,7 +60,7 @@
         <th scope="row" th:text="${students.id}"></th>
         <td th:text="${students.name}"></td>
         <td th:text="${students.address}"></td>
-        <td><img height="20%" width="20%" th:src="@{'/static/image/' + ${students.image}}" alt="" src=""></td>
+        <td class="a"><img th:src="@{'/static/image/' + ${students.image}}" alt="" src=""></td>
         <td><a th:href="@{students/update/{id}(id=${students.id})}">Edit</a></td>
         <td><a th:href="@{students/delete/{id}(id=${students.id})}" onclick="return confirm('Xóa nhé???')">Delete</a></td>
         <td><a th:href="@{students/view/{id}(id=${students.id})}">View</a></td>
@@ -65,7 +84,7 @@
             <th scope="row" th:text="${item1.id}"></th>
             <td th:text="${item1.name}"></td>
             <td th:text="${item1.address}"></td>
-            <td><img height="20%" width="20%" th:src="@{'/static/image/' + ${item1.image}}" alt="" src=""></td>
+            <td class="a"><img th:src="@{'/static/image/' + ${item1.image}}" alt="" src=""></td>
         </tr>
         </tbody>
     </table>
