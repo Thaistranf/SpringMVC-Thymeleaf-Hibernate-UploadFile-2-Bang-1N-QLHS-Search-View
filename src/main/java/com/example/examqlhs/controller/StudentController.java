@@ -1,8 +1,10 @@
 package com.example.examqlhs.controller;
 
-import com.example.examqlhs.model.Student;
-import com.example.examqlhs.model.StudentForm;
-import com.example.examqlhs.service.StudentService;
+import com.example.examqlhs.model.Classroom;
+import com.example.examqlhs.model.student.Student;
+import com.example.examqlhs.model.student.StudentForm;
+import com.example.examqlhs.service.classroom.IClassroomService;
+import com.example.examqlhs.service.student.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -20,21 +22,31 @@ import java.util.List;
 @RequestMapping("/students")
 public class StudentController {
     @Autowired
-    StudentService studentService;
+    // Dùng kiểu dữ liệu là "IStudentService" vì cấu hình @Bean trong AppConfiguration là "IStudentService"
+    // thì mới lấy được dữ liệu trong vài trường hợp hãm loz
+    private IStudentService studentService;
+    @Autowired
+    // Dùng kiểu dữ liệu là "IClassroomService" vì cấu hình @Bean trong AppConfiguration là "IClassroomService"
+    // thì mới lấy được dữ liệu trong vài trường hợp hãm loz
+    private IClassroomService classroomService;
+    @ModelAttribute("classList")    //Khai bao "classList" de lay ra ds classroom dung duoc o nhieu .html khac nhau trong views
+    public Iterable<Classroom> classrooms(){
+        return classroomService.findAll();
+    }
 
     @Value("${file-upload}")
     private String fileUpload;
 
     @GetMapping
     public ModelAndView showList(){
-        ModelAndView modelAndView = new ModelAndView("/list");
+        ModelAndView modelAndView = new ModelAndView("/student/list");
         modelAndView.addObject("studentList", studentService.findAll());
         return modelAndView;
     }
 
     @GetMapping("/create")
     public ModelAndView showFormCreate(){
-        ModelAndView modelAndView = new ModelAndView("/create");
+        ModelAndView modelAndView = new ModelAndView("/student/create");
         modelAndView.addObject("newStudent", new StudentForm());
         return modelAndView;
     }
@@ -48,14 +60,14 @@ public class StudentController {
         } catch (IOException ex) {
             System.out.println(ex);
         }
-        Student student = new Student(studentForm.getId(),studentForm.getName(), studentForm.getAddress(), fileName);
+        Student student = new Student(studentForm.getId(),studentForm.getName(), studentForm.getAddress(), fileName, studentForm.getClassroom());
         studentService.save(student);
         return ("redirect:/students");
     }
 
     @GetMapping("/update/{id}")
     public ModelAndView showFormUpdate(@PathVariable Long id){
-        ModelAndView modelAndView = new ModelAndView("/update");
+        ModelAndView modelAndView = new ModelAndView("/student/update");
         Student student = studentService.findById(id).get();
         modelAndView.addObject("studentUp", student);
         return modelAndView;
@@ -74,9 +86,9 @@ public class StudentController {
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            student1 = new Student(studentForm.getId(),studentForm.getName(), studentForm.getAddress(), fileName);
+            student1 = new Student(studentForm.getId(),studentForm.getName(), studentForm.getAddress(), fileName, studentForm.getClassroom());
         } else {
-            student1 = new Student(studentForm.getId(), studentForm.getName(),studentForm.getAddress(), student.getImage());
+            student1 = new Student(studentForm.getId(), studentForm.getName(),studentForm.getAddress(), student.getImage(), studentForm.getClassroom());
         }
 
         studentService.save(student1);
@@ -92,13 +104,13 @@ public class StudentController {
     @GetMapping("/view/{id}")
     public String View(@PathVariable Long id, Model model){
         model.addAttribute("studentView", studentService.findById(id).get());
-        return "/view";
+        return "/student/view";
     }
 
     @PostMapping("/search")
     public String search(@RequestParam("keyword") String keyword, Model model){
         List<Student> searchStudent = studentService.search(keyword);
         model.addAttribute("searchStudent", searchStudent);
-        return "/list";
+        return "/student/list";
     }
 }

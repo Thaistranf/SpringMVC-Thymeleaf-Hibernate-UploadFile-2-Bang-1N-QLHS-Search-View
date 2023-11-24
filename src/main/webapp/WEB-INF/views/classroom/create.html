@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>New classroom</h1>
+<a th:href="@{/classroom}">Back to home</a>
+<form th:action="@{/classroom/create}" th:object="${createClass}" method="post">
+    <label for="className">Classroom: </label>
+    <input type="text" id="className" name="className" th:field="*{className}"><br>
+    <input type="submit" value="Add">
+</form>
+</body>
+</html>

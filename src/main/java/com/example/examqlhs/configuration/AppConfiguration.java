@@ -1,6 +1,11 @@
 package com.example.examqlhs.configuration;
 
 
+import com.example.examqlhs.formatter.ClassroomFormatter;
+import com.example.examqlhs.service.classroom.IClassroomService;
+import com.example.examqlhs.service.student.IStudentService;
+import com.example.examqlhs.service.classroom.ClassroomService;
+import com.example.examqlhs.service.student.StudentService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -91,10 +97,10 @@ public class AppConfiguration implements WebMvcConfigurer, ApplicationContextAwa
         registry.addResourceHandler("/static/image/**")
                 .addResourceLocations("file:" + fileUpload);
         registry.addResourceHandler("/static/css/**")
-                .addResourceLocations("file:" + "D:\\codeIntellij\\Exam-QLHS\\src\\main\\webapp\\WEB-INF\\views\\static\\css\\");
+                .addResourceLocations("file:" + "D:\\codeIntellij\\SpringMVC-Thymeleaf-Hibernate-UploadFile-MySQL-QLHS-Search-View\\src\\main\\webapp\\WEB-INF\\views\\static\\css\\");
     }
 
-    //JPA
+    // 5 cai sau cau hinh cho JPA
     @Bean
     @Qualifier(value = "entityManager")
     public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
@@ -134,5 +140,21 @@ public class AppConfiguration implements WebMvcConfigurer, ApplicationContextAwa
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
         return properties;
+    }
+
+    @Bean
+    public IStudentService studentService(){
+        return new StudentService();
+    }
+
+    @Bean
+    public IClassroomService classroomService(){
+        return new ClassroomService();
+    }
+
+    // cấu hình formatter
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new ClassroomFormatter(applicationContext.getBean(ClassroomService.class)));
     }
 }
