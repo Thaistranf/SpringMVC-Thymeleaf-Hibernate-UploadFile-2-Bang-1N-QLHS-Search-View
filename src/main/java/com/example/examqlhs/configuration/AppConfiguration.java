@@ -1,7 +1,7 @@
 package com.example.examqlhs.configuration;
 
 
-import com.example.examqlhs.formatter.ClassroomFormatter;
+//import com.example.examqlhs.formatter.ClassroomFormatter;
 import com.example.examqlhs.service.classroom.IClassroomService;
 import com.example.examqlhs.service.student.IStudentService;
 import com.example.examqlhs.service.classroom.ClassroomService;
@@ -153,8 +153,8 @@ public class AppConfiguration implements WebMvcConfigurer, ApplicationContextAwa
     }
 
     // cấu hình formatter
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addFormatter(new ClassroomFormatter(applicationContext.getBean(ClassroomService.class)));
-    }
+//    @Override
+//    public void addFormatters(FormatterRegistry registry) {
+//        registry.addFormatter(new ClassroomFormatter(applicationContext.getBean(ClassroomService.class)));
+//    }
 }
